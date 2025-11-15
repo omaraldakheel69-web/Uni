@@ -1,0 +1,7 @@
+{
+  "name": "Acme Corp",
+  "email": "contact@acme.com",
+  "rating": 5,
+  "verified": true,
+  "active": true
+}

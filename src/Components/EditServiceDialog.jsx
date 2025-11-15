@@ -11,6 +11,21 @@ export default function EditServiceDialog({ open, onClose, initial = {}, onSave 
 
   const handleChange = (k) => (e) => setForm((s) => ({ ...s, [k]: e.target.type === "number" ? Number(e.target.value) : e.target.value }));
 
+  const handleSave = async () => {
+    try {
+      const response = await fetch(initial?.id ? `/api/services/${initial.id}` : "/api/services", {
+        method: initial?.id ? "PUT" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+      const data = await response.json();
+      onSave(data);
+      onClose();
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Dialog open={open} onClose={() => onClose()}>
       <DialogTitle>{initial?.id ? "Edit Service" : "Create Service"}</DialogTitle>
@@ -22,7 +37,7 @@ export default function EditServiceDialog({ open, onClose, initial = {}, onSave 
       </DialogContent>
       <DialogActions>
         <Button onClick={() => onClose()}>Cancel</Button>
-        <Button onClick={() => onSave(form)} variant="contained">Save</Button>
+        <Button onClick={handleSave} variant="contained">Save</Button>
       </DialogActions>
     </Dialog>
   );

@@ -6,10 +6,10 @@ export default function Topbar() {
       position="fixed" 
       sx={{ 
         zIndex: 1201, 
-        // --- ADD THESE TWO LINES FOR THE NEW COLOR ---
+        
         backgroundColor: '#11694C', 
         color: '#ffffff' 
-        // ---------------------------------------------
+        
       }}
     >
       <Toolbar>

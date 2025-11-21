@@ -104,24 +104,24 @@ export default function Bookings() {
            <TableBody>
     {bookings.map((b) => (
         <TableRow 
-            // 1. Update the key to use the snake_case ID (or fallback)
+            
             key={b.booking_id || b.id} 
             sx={{
                 "&:nth-of-type(odd)": { backgroundColor: "#F9F9F9" },
                 "&:hover": { backgroundColor: "#E8F5E9" },
             }}
         >
-            {/* Tweak Booking ID */}
+            {}
             <TableCell>{b.booking_id || b.id}</TableCell> 
-            {/* Tweak User ID: b.userId -> b.user_id */}
+            {}
             <TableCell>{find(users, b.user_id || b.userId, "name")}</TableCell>
-            {/* Tweak Company ID: b.companyId -> b.company_id */}
+            {}
             <TableCell>{find(companies, b.company_id || b.companyId, "name")}</TableCell>
-            {/* Tweak Service ID: b.serviceId -> b.service_id */}
+            {}
             <TableCell>{find(services, b.service_id || b.serviceId, "name")}</TableCell>
             
             <TableCell>
-                {/* 2. Tweak Scheduled At field (assuming b.scheduledAt -> b.scheduled_at) */}
+                {}
                 {new Date(b.scheduled_at || b.scheduledAt).toLocaleString()}
             </TableCell>
             
@@ -131,12 +131,12 @@ export default function Bookings() {
                     <Select
                         size="small"
                         sx={{
-                            bgcolor: "#E6F7EA", // Updated light green background
+                            bgcolor: "#E6F7EA", 
                             borderRadius: "8px",
                             "& .MuiSelect-select": { py: 1 },
                         }}
                         value={b.status}
-                        // 3. Update changeStatus to use snake_case ID
+                        
                         onChange={(e) => changeStatus(b.booking_id || b.id, e.target.value)} 
                     >
                         <MenuItem value="pending">Pending</MenuItem>
@@ -146,7 +146,7 @@ export default function Bookings() {
                     </Select>
                 </FormControl>
             </TableCell>
-            {/* Tweak for Actions Column (if applicable) */}
+            {}
         </TableRow>
     ))}
 </TableBody>

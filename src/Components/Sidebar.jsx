@@ -15,7 +15,7 @@ import CleaningServicesIcon from '@mui/icons-material/CleaningServices';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 
-// Define the menu structure
+
 const menu = [
     { label: "Dashboard", icon: <DashboardIcon />, path: "/dashboard" },
     { label: "Users", icon: <PeopleIcon />, path: "/users" },
@@ -23,11 +23,11 @@ const menu = [
     { label: "Services", icon: <CleaningServicesIcon />, path: "/services" },
 ];
 
-const drawerWidth = 240; // Optional: Define your drawer width
+const drawerWidth = 240; 
 
 export default function Sidebar() {
     const navigate = useNavigate();
-    const { pathname } = useLocation(); // Get the current URL path
+    const { pathname } = useLocation(); 
 
     return (
         <Drawer
@@ -38,12 +38,12 @@ export default function Sidebar() {
                 [`& .MuiDrawer-paper`]: {
                     width: drawerWidth,
                     boxSizing: 'border-box',
-                    backgroundColor: '#212529', // Dark background
-                    color: '#f8f9fa',          // Light text color
+                    backgroundColor: '#212529', 
+                    color: '#f8f9fa',          
                 },
             }}
         >
-            <Toolbar /> {/* Adds space to sit below the Topbar */}
+            <Toolbar /> {}
             <List>
                 {menu.map((item) => (
                     <ListItem 
@@ -53,27 +53,27 @@ export default function Sidebar() {
                     >
                         <ListItemButton 
                             onClick={() => navigate(item.path)}
-                            // --- ACTIVE STATE LOGIC ---
+                            
                             selected={pathname === item.path} 
                             
-                            // --- STYLING ---
+                            
                             sx={{
                                 minHeight: 48,
                                 justifyContent: 'center',
                                 px: 2.5,
                                 
-                                // Default (Inactive) Hover Style
+                                
                                 '&:hover': {
                                     backgroundColor: '#495057', 
                                 },
                                 
-                                // Active State (Green Background)
+                                
                                 '&.Mui-selected': {
                                     backgroundColor: '#11694C.', 
                                     color: '#ffffff',
                                     fontWeight: 'bold',
 
-                                    // Override active state hover
+                                    
                                     '&:hover': {
                                         backgroundColor: '#11694C.', 
                                     },
@@ -85,7 +85,7 @@ export default function Sidebar() {
                                     minWidth: 0,
                                     mr: 3,
                                     justifyContent: 'center',
-                                    // Change icon color based on active state
+                                    
                                     color: pathname === item.path ? '#ffffff' : '#f8f9fa',
                                 }}
                             >

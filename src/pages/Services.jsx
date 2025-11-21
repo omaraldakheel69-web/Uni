@@ -26,11 +26,11 @@ import {
   deleteService,
 } from "../api/mockApi";
 import EditServiceDialog from "../Components/EditServiceDialog";
-import TitleIcon from "@mui/icons-material/Title"; // For Name
-import DescriptionIcon from "@mui/icons-material/Description"; // For Description
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney"; // For Price/hr
-import CategoryIcon from "@mui/icons-material/Category"; // For Category
-import SettingsIcon from "@mui/icons-material/Settings"; // For Actions
+import TitleIcon from "@mui/icons-material/Title"; 
+import DescriptionIcon from "@mui/icons-material/Description"; 
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney"; 
+import CategoryIcon from "@mui/icons-material/Category"; 
+import SettingsIcon from "@mui/icons-material/Settings"; 
 
 export default function Services() {
   const [services, setServices] = useState([]);
@@ -137,11 +137,11 @@ export default function Services() {
 
            <TableBody>
     {services.map((s) => (
-        // KEY should use the unique identifier from the service object
+        
         <TableRow key={s.service_id || s.id}> 
             <TableCell>{s.name}</TableCell>
             <TableCell>{s.description}</TableCell>
-            {/* Tweak Price field name for consistency */}
+            {}
             <TableCell>${s.price_per_hour || s.pricePerHour}</TableCell> 
             <TableCell>{s.category}</TableCell>
             <TableCell>
@@ -150,7 +150,7 @@ export default function Services() {
                 </IconButton>
                 <IconButton 
                     size="small" 
-                    // Tweak ID field name for deletion confirmation
+                    
                     onClick={() => setConfirm({ open: true, id: s.service_id || s.id })} 
                 > 
                     <DeleteIcon />

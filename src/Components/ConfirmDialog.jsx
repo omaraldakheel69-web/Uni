@@ -11,11 +11,11 @@ export default function ConfirmDialog({ open, title = "Confirm", description = "
       <DialogActions>
        <Button 
     onClick={() => onClose(false)} 
-    variant="text" // Use text variant to keep it subtle
+    variant="text" 
     sx={{ 
-        color: '#0d0303ff', // A professional dark grey color
+        color: '#0d0303ff', 
         '&:hover': {
-            backgroundColor: 'rgba(108, 117, 125, 0.04)', // Slight hover effect
+            backgroundColor: 'rgba(108, 117, 125, 0.04)', 
         }
     }}
 >

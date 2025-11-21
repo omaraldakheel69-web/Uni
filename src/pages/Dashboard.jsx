@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Box, Typography, Paper, Grid } from "@mui/material";
-// --- ICON IMPORTS ---
 import PeopleIcon from '@mui/icons-material/People'; 
 import BusinessIcon from '@mui/icons-material/Business'; 
 import EventNoteIcon from '@mui/icons-material/EventNote'; 
-
-// --- COMPONENT IMPORTS ---
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbard";
-
-// --- API IMPORTS (ADJUST PATHS AS NEEDED) ---
-// I'm guessing these based on your other files (like Bookings.jsx)
-// You may need to create an API file that consolidates these calls.
-// If you don't have separate API calls, you'll need to load the data here.
 import { listUsers } from "../api/mockApi";
 import { listCompanies } from "../api/mockApi";
 import { listBookings } from "../api/mockApi";
 
 
 export default function Dashboard() {
-    // --- STATE MANAGEMENT ---
+    
     const [users, setUsers] = useState([]);
     const [companies, setCompanies] = useState([]);
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    // --- DATA FETCHING ---
+   
     const loadData = async () => {
         try {
             const [usersData, companiesData, bookingsData] = await Promise.all([
@@ -38,7 +30,7 @@ export default function Dashboard() {
             setBookings(bookingsData);
         } catch (error) {
             console.error("Failed to fetch dashboard data:", error);
-            // Handle error, maybe show a message to the user
+            
         } finally {
             setLoading(false);
         }
@@ -48,12 +40,12 @@ export default function Dashboard() {
         loadData();
     }, []);
     
-    // --- DERIVED METRICS ---
+    
     const totalUsers = users.length;
     const totalCompanies = companies.length;
-    const servicesBooked = bookings.length; // Assuming bookings.length is the count you want
+    const servicesBooked = bookings.length; 
 
-    // --- RENDER LOGIC ---
+   
     return (
         <Box sx={{ display: "flex" }}>
             <Topbar />
@@ -62,9 +54,9 @@ export default function Dashboard() {
             <Box 
     component="main" 
     sx={{
-        // ... other styles
+        
         minHeight: "100vh",
-        // --- CORRECTED STYLE ---
+        
         background: `repeating-linear-gradient(
             0deg,
             #f2f2f2ff,
@@ -77,8 +69,8 @@ export default function Dashboard() {
             #f2f2f2 1px,
             #ffffff 1px,
             #ffffff 100px
-        )`, // <--- The string ends here with a closing backtick
-        // -----------------------
+        )`, 
+        
     }}
 >
 
@@ -91,16 +83,16 @@ export default function Dashboard() {
                 ) : (
                     <Grid container spacing={3}>
                         
-                        {/* *** 1. Users Card *** */}
+                        {}
                         <Grid item xs={12} sm={6} md={4}>
                             <Paper elevation={3} sx={{
                                 p: 3,
                                 borderRadius: '12px',
                                 textAlign: 'center',
-                                // Optional: make the shadow a bit softer
+                                
                                 boxShadow: '0 8px 16px rgba(0, 0, 0, 0.08)', 
                             }}>
-                                <PeopleIcon sx={{ color: '#4CAF50', fontSize: 40 }} /> {/* Use a standard green */}
+                                <PeopleIcon sx={{ color: '#4CAF50', fontSize: 40 }} /> {}
                                 <Typography variant="h6" color="text.secondary" sx={{ mt: 1 }}>
                                     Total Users
                                 </Typography>
@@ -110,7 +102,7 @@ export default function Dashboard() {
                             </Paper>
                         </Grid>
                         
-                        {/* *** 2. Companies Card *** */}
+                        {}
                         <Grid item xs={12} sm={6} md={4}>
                             <Paper elevation={3} sx={{
                                 p: 3,
@@ -128,7 +120,7 @@ export default function Dashboard() {
                             </Paper>
                         </Grid>
                         
-                        {/* *** 3. Bookings Card *** */}
+                        {}
                         <Grid item xs={12} sm={6} md={4}>
                             <Paper elevation={3} sx={{
                                 p: 3,

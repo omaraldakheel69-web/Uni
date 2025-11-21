@@ -38,11 +38,11 @@ export default function EditServiceDialog({ open, onClose, initial = {}, onSave 
       <DialogActions>
         <Button 
     onClick={() => onClose()} 
-    variant="text" // Use text variant to keep it subtle
+    variant="text" 
     sx={{ 
-        color: '#0d0303ff', // A professional dark grey color
+        color: '#0d0303ff', 
         '&:hover': {
-            backgroundColor: 'rgba(255, 255, 255, 0.04)', // Slight hover effect
+            backgroundColor: 'rgba(255, 255, 255, 0.04)', 
         }
     }}
 >

@@ -12,8 +12,8 @@ import RatingIcon from '@mui/icons-material/StarRate';
 import VerifiedIcon from '@mui/icons-material/VerifiedUser';
 import ToggleOnIcon from '@mui/icons-material/ToggleOn';
 import EmailIcon from '@mui/icons-material/Email';
-import WorkIcon from '@mui/icons-material/Work'; // For Services
-import SettingsIcon from '@mui/icons-material/Settings'; // For Actions
+import WorkIcon from '@mui/icons-material/Work'; 
+import SettingsIcon from '@mui/icons-material/Settings'; 
 
 
 export default function Companies() {
@@ -70,9 +70,9 @@ export default function Companies() {
     variant="contained" 
     onClick={handleCreate}
     sx={{
-        backgroundColor: '#11694C', // Deep forest green
+        backgroundColor: '#11694C', 
         '&:hover': {
-            backgroundColor: '#0c5c3b', // Slightly darker green on hover
+            backgroundColor: '#0c5c3b', 
         }
     }}
 >

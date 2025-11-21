@@ -16,9 +16,9 @@ import { listUsers, listBookings } from "../api/mockApi";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EmailIcon from "@mui/icons-material/Email";
 import PhoneIcon from "@mui/icons-material/Phone";
-import BadgeIcon from "@mui/icons-material/Badge"; // For Role
-import EventNoteIcon from "@mui/icons-material/EventNote"; // For Bookings
-import SettingsIcon from "@mui/icons-material/Settings"; // For Actions
+import BadgeIcon from "@mui/icons-material/Badge"; 
+import EventNoteIcon from "@mui/icons-material/EventNote"; 
+import SettingsIcon from "@mui/icons-material/Settings"; 
 
 export default function Users() {
   const [users, setUsers] = useState([]);
@@ -97,7 +97,7 @@ export default function Users() {
                   <TableCell>{countBookings(u.id)}</TableCell>
                   <TableCell>
                     <IconButton size="small">
-                      {/* <VisibilityIcon /> */}
+                      {}
                     </IconButton>
                   </TableCell>
                 </TableRow>

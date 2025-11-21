@@ -36,8 +36,30 @@ export default function EditServiceDialog({ open, onClose, initial = {}, onSave 
         <TextField label="Category" value={form.category} onChange={handleChange("category")} />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => onClose()}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained">Save</Button>
+        <Button 
+    onClick={() => onClose()} 
+    variant="text" // Use text variant to keep it subtle
+    sx={{ 
+        color: '#0d0303ff', // A professional dark grey color
+        '&:hover': {
+            backgroundColor: 'rgba(255, 255, 255, 0.04)', // Slight hover effect
+        }
+    }}
+>
+    Cancel
+</Button>
+        <Button 
+    onClick={handleSave} 
+    variant="contained"
+    sx={{
+        backgroundColor: '#11694C',
+        '&:hover': {
+            backgroundColor: '#0c5c3b',
+        }
+    }}
+>
+    Save
+</Button>
       </DialogActions>
     </Dialog>
   );

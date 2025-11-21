@@ -8,6 +8,13 @@ import Topbar from "../Components/Topbard";
 import ConfirmDialog from "../Components/ConfirmDialog";
 import EditCompanyDialog from "../Components/EditCompanyDialog";
 import { listCompanies, createCompany, updateCompany, deleteCompany, listServices } from "../api/mockApi";
+import RatingIcon from '@mui/icons-material/StarRate';
+import VerifiedIcon from '@mui/icons-material/VerifiedUser';
+import ToggleOnIcon from '@mui/icons-material/ToggleOn';
+import EmailIcon from '@mui/icons-material/Email';
+import WorkIcon from '@mui/icons-material/Work'; // For Services
+import SettingsIcon from '@mui/icons-material/Settings'; // For Actions
+
 
 export default function Companies() {
   const [companies, setCompanies] = useState([]);
@@ -45,28 +52,70 @@ export default function Companies() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box component="main"
+  sx={{
+    flexGrow: 1,
+    p: 3,
+    mt: 8,
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #ffffff 0%, #f3f6fa 100%)",
+  }}>
       <Topbar />
       <Sidebar />
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
           <Typography variant="h4">Companies</Typography>
-          <Button startIcon={<AddIcon />} variant="contained" onClick={handleCreate}>New Company</Button>
+          <Button 
+    startIcon={<AddIcon />} 
+    variant="contained" 
+    onClick={handleCreate}
+    sx={{
+        backgroundColor: '#11694C', // Deep forest green
+        '&:hover': {
+            backgroundColor: '#0c5c3b', // Slightly darker green on hover
+        }
+    }}
+>
+    New Company
+</Button>
         </Grid>
 
         <Paper sx={{ p: 2 }}>
           <Table>
             <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Rating</TableCell>
-                <TableCell>Verified</TableCell>
-                <TableCell>Active</TableCell>
-                <TableCell>Services</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
+    <TableRow>
+        <TableCell>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <EmailIcon sx={{ mr: 1, fontSize: 18 }} /> Email
+            </Box>
+        </TableCell>
+        <TableCell>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <RatingIcon sx={{ mr: 1, fontSize: 18 }} /> Rating
+            </Box>
+        </TableCell>
+        <TableCell>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <VerifiedIcon sx={{ mr: 1, fontSize: 18 }} /> Verified
+            </Box>
+        </TableCell>
+        <TableCell>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <ToggleOnIcon sx={{ mr: 1, fontSize: 18 }} /> Active
+            </Box>
+        </TableCell>
+        <TableCell>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <WorkIcon sx={{ mr: 1, fontSize: 18 }} /> Services
+            </Box>
+        </TableCell>
+        <TableCell>
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <SettingsIcon sx={{ mr: 1, fontSize: 18 }} /> Actions
+            </Box>
+        </TableCell>
+    </TableRow>
+</TableHead>
 
             <TableBody>
               {companies.map((c) => (

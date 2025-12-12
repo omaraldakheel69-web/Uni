@@ -1,169 +1,177 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Typography,
-  Paper,
-  Grid,
   Button,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
   TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
   IconButton,
+  Typography,
+  Alert,
+  CircularProgress,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+
 import Sidebar from "../Components/Sidebar";
 import Topbar from "../Components/Topbard";
+import EditServiceDialog from "../SerDia/EditServiceDialog";
 import ConfirmDialog from "../Components/ConfirmDialog";
-import EditCompanyDialog from "../Components/EditCompanyDialog";
-import {
-  listServices,
-  createService,
-  updateService,
-  deleteService,
-} from "../api/mockApi";
-import EditServiceDialog from "../Components/EditServiceDialog";
-import TitleIcon from "@mui/icons-material/Title"; 
-import DescriptionIcon from "@mui/icons-material/Description"; 
-import AttachMoneyIcon from "@mui/icons-material/AttachMoney"; 
-import CategoryIcon from "@mui/icons-material/Category"; 
-import SettingsIcon from "@mui/icons-material/Settings"; 
+
+import * as api from "../api/mockApi";
+
+const drawerWidth = 240;
 
 export default function Services() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [edit, setEdit] = useState({ open: false, initial: null });
   const [confirm, setConfirm] = useState({ open: false, id: null });
 
-  async function load() {
+  const load = async () => {
     setLoading(true);
-    const s = await listServices();
-    setServices(s);
-    setLoading(false);
-  }
+    setError(null);
+    try {
+      const data = await api.listServices();
+      setServices(data);
+    } catch (err) {
+      console.error("Failed to fetch services:", err);
+      setError("Failed to load services. Please check the mock API.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     load();
   }, []);
 
-  const handleCreate = () => setEdit({ open: true, initial: null });
-  const handleEdit = (service) => setEdit({ open: true, initial: service });
-
-  const handleSave = async (payload) => {
-    if (edit.initial?.id) {
-      await updateService(edit.initial.id, payload);
-    } else {
-      await createService(payload);
-    }
-    setEdit({ open: false, initial: null });
-    load();
+  const handleCreate = () => {
+    setEdit({ open: true, initial: null });
   };
 
-  const handleDelete = async (id) => {
-    await deleteService(id);
-    load();
+  const handleEdit = (service) => {
+    setEdit({ open: true, initial: service });
+  };
+
+  const handleSave = async (payload) => {
+    try {
+      const servicePayload = {
+        name: payload.name,
+        description: payload.description,
+        category: payload.category,
+        pricePerHour: Number(payload.pricePerHour),
+        image: payload.imageFile || null,
+      };
+
+      if (edit.initial?.id) {
+        await api.updateService(edit.initial.id, servicePayload);
+      } else {
+        await api.createService(servicePayload);
+      }
+
+      setEdit({ open: false, initial: null });
+      load();
+    } catch (err) {
+      console.error("Failed to save service:", err);
+      setError("Failed to save service. Check server console.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!confirm.id) return;
+    try {
+      await api.deleteService(confirm.id);
+      setConfirm({ open: false, id: null });
+      load();
+    } catch (err) {
+      console.error("Failed to delete service:", err);
+      setError("Failed to delete service. Check server console.");
+    }
   };
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Topbar />
+      {/* Sidebar */}
       <Sidebar />
+
+      {/* Main Content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
-          mt: 8,
-          minHeight: "100vh",
-          background: "linear-gradient(135deg, #ffffff 0%, #f3f6fa 100%)",
+          width: `calc(100% - ${drawerWidth}px)`,
+          mt: 8, // pushes content below Topbar
         }}
       >
-        <Grid
-          container
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ mb: 2 }}
-        >
+        <Topbar />
+
+        <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
           <Typography variant="h4">Services</Typography>
           <Button
-            startIcon={<AddIcon />}
             variant="contained"
+            color="primary"
+            startIcon={<AddIcon />}
             onClick={handleCreate}
-            sx={{
-              backgroundColor: "#11694C",
-              "&:hover": {
-                backgroundColor: "#0c5c3b",
-              },
-            }}
+            sx={{ backgroundColor: "#11694C", "&:hover": { backgroundColor: "#0c5c3b" } }}
           >
-            New Service
+            NEW SERVICE
           </Button>
-        </Grid>
+        </Box>
 
-        <Paper sx={{ p: 2 }}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <TitleIcon sx={{ mr: 1, fontSize: 18 }} /> Name
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <DescriptionIcon sx={{ mr: 1, fontSize: 18 }} /> Description
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <AttachMoneyIcon sx={{ mr: 1, fontSize: 18 }} /> Price/hr
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <CategoryIcon sx={{ mr: 1, fontSize: 18 }} /> Category
-                  </Box>
-                </TableCell>
-                <TableCell>
-                  <Box sx={{ display: "flex", alignItems: "center" }}>
-                    <SettingsIcon sx={{ mr: 1, fontSize: 18 }} /> Actions
-                  </Box>
-                </TableCell>
-              </TableRow>
-            </TableHead>
+        {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
 
-           <TableBody>
-    {services.map((s) => (
-        
-        <TableRow key={s.service_id || s.id}> 
-            <TableCell>{s.name}</TableCell>
-            <TableCell>{s.description}</TableCell>
-            {}
-            <TableCell>${s.price_per_hour || s.pricePerHour}</TableCell> 
-            <TableCell>{s.category}</TableCell>
-            <TableCell>
-                <IconButton size="small" onClick={() => handleEdit(s)}> 
-                    <EditIcon /> 
-                </IconButton>
-                <IconButton 
-                    size="small" 
-                    
-                    onClick={() => setConfirm({ open: true, id: s.service_id || s.id })} 
-                > 
-                    <DeleteIcon />
-                </IconButton>
-            </TableCell>
-        </TableRow>
-    ))}
-</TableBody>
-          </Table>
-
-          {!loading && services.length === 0 && (
-            <Typography sx={{ p: 2 }}>No services yet.</Typography>
-          )}
+        <Paper elevation={3}>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Description</TableCell>
+                  <TableCell>$ Price/hr</TableCell>
+                  <TableCell>Category</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      <CircularProgress size={24} />
+                    </TableCell>
+                  </TableRow>
+                ) : services.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">No services found</TableCell>
+                  </TableRow>
+                ) : (
+                  services.map((s) => (
+                    <TableRow key={s.id}>
+                      <TableCell>{s.name || ""}</TableCell>
+                      <TableCell>{s.description || ""}</TableCell>
+                      <TableCell>${s.pricePerHour || 0}</TableCell>
+                      <TableCell>{s.category || ""}</TableCell>
+                      <TableCell>
+                        <IconButton size="small" onClick={() => handleEdit(s)}>
+                          <EditIcon />
+                        </IconButton>
+                        <IconButton size="small" onClick={() => setConfirm({ open: true, id: s.id })}>
+                          <DeleteIcon />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
         </Paper>
 
         <EditServiceDialog
@@ -172,12 +180,13 @@ export default function Services() {
           onClose={() => setEdit({ open: false, initial: null })}
           onSave={handleSave}
         />
+
         <ConfirmDialog
           open={confirm.open}
-          title="Delete Service"
-          description="Delete this service?"
-          onClose={(v) => setConfirm((s) => ({ ...s, open: v }))}
-          onConfirm={() => handleDelete(confirm.id)}
+          onClose={() => setConfirm({ open: false, id: null })}
+          onConfirm={handleDelete}
+          title="Confirm Deletion"
+          message="Are you sure you want to delete this service? This action cannot be undone."
         />
       </Box>
     </Box>

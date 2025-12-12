@@ -38,19 +38,19 @@ export default function Users() {
     bookings.filter((b) => b.userId === userId).length;
 
   return (
-    <Box
-      component="main"
-      sx={{
-        flexGrow: 1,
-        p: 3,
-        mt: 8,
-        minHeight: "100vh",
-        background: "linear-gradient(135deg, #ffffff 0%, #f3f6fa 100%)",
-      }}
-    >
+    <Box sx={{ display: "flex" }}>
       <Topbar />
       <Sidebar />
-      <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
+      <Box
+        component="main"
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          mt: 8,
+          minHeight: "100vh",
+          background: "linear-gradient(135deg, #ffffff 0%, #f3f6fa 100%)",
+        }}
+      >
         <Typography variant="h4" sx={{ mb: 2 }}>
           Users
         </Typography>
@@ -59,6 +59,11 @@ export default function Users() {
           <Table>
             <TableHead>
               <TableRow>
+                <TableCell>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <BadgeIcon sx={{ mr: 1, fontSize: 18 }} /> Name
+                  </Box>
+                </TableCell>
                 <TableCell>
                   <Box sx={{ display: "flex", alignItems: "center" }}>
                     <EmailIcon sx={{ mr: 1, fontSize: 18 }} /> Email
@@ -90,14 +95,15 @@ export default function Users() {
             <TableBody>
               {users.map((u) => (
                 <TableRow key={u.id}>
-                  <TableCell>{u.name}</TableCell>
+                  {/* Corrected order to match TableHead */}
+                  <TableCell>{u.name}</TableCell> 
                   <TableCell>{u.email}</TableCell>
                   <TableCell>{u.phone}</TableCell>
                   <TableCell>{u.role}</TableCell>
                   <TableCell>{countBookings(u.id)}</TableCell>
                   <TableCell>
                     <IconButton size="small">
-                      {}
+                      <VisibilityIcon /> 
                     </IconButton>
                   </TableCell>
                 </TableRow>

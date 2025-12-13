@@ -1,13 +1,6 @@
-import axios from "axios";
+import api from "./axiousInstance";
 
-const API_URL = "http://localhost:5000/api/companies";
-
-export const getCompanies = () => axios.get(API_URL);
-
-export const createCompany = (data) => axios.post(API_URL, data);
-
-export const updateCompany = (id, data) =>
-  axios.put(`${API_URL}/${id}`, data);
-
-export const deleteCompany = (id) =>
-  axios.delete(`${API_URL}/${id}`);
+export const getCompanies = () => api.get("/companies");
+export const createCompany = (data) => api.post("/companies", data);
+export const updateCompany = (id, data) => api.put(`/companies/${id}`, data);
+export const deleteCompany = (id) => api.delete(`/companies/${id}`);

@@ -1,21 +1,21 @@
-import { AppBar, Toolbar, Typography } from "@mui/material";
+import React from "react";
+import { AppBar, Toolbar, Typography, Button } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export default function Topbar() {
+  const navigate = useNavigate();
+  const token = localStorage.getItem("token");
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/login");
+  };
+
   return (
-    <AppBar 
-      position="fixed" 
-      sx={{ 
-        zIndex: 1201, 
-        
-        backgroundColor: '#11694C', 
-        color: '#ffffff' 
-        
-      }}
-    >
-      <Toolbar>
-        <Typography variant="h6" nowrap component="div">
-          Admin Dashboard
-        </Typography>
+    <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+      <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+        <Typography variant="h6" noWrap>Admin Dashboard</Typography>
+        {token && <Button color="inherit" onClick={handleLogout}>Logout</Button>}
       </Toolbar>
     </AppBar>
   );

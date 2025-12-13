@@ -24,27 +24,16 @@ import api from "../api/axiousInstance";
 export default function Companies() {
   const [companies, setCompanies] = useState([]);
   const [services, setServices] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [edit, setEdit] = useState({ open: false, initial: null });
   const [confirm, setConfirm] = useState({ open: false, id: null });
-  const [error, setError] = useState("");
 
   const fetchData = async () => {
-    setLoading(true);
-    setError("");
-    try {
-      const [companiesRes, servicesRes] = await Promise.all([
-        api.get("/companies"),
-        api.get("/services"),
-      ]);
-      setCompanies(companiesRes.data);
-      setServices(servicesRes.data);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load companies.");
-    } finally {
-      setLoading(false);
-    }
+    const [cRes, sRes] = await Promise.all([
+      api.get("/companies"),
+      api.get("/services"),
+    ]);
+    setCompanies(cRes.data);
+    setServices(sRes.data);
   };
 
   useEffect(() => {
@@ -52,34 +41,25 @@ export default function Companies() {
   }, []);
 
   const handleSave = async (payload) => {
-    try {
-      if (edit.initial?.id) {
-        await api.put(`/companies/${edit.initial.id}`, payload);
-      } else {
-        await api.post("/companies", payload);
-      }
-      setEdit({ open: false, initial: null });
-      fetchData();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to save company.");
+    if (edit.initial?.id) {
+      await api.put(`/companies/${edit.initial.id}`, payload);
+    } else {
+      await api.post("/companies", payload);
     }
+    setEdit({ open: false, initial: null });
+    fetchData();
   };
 
   const handleDelete = async (id) => {
-    try {
-      await api.delete(`/companies/${id}`);
-      fetchData();
-    } catch (err) {
-      console.error(err);
-      alert("Failed to delete company.");
-    }
+    await api.delete(`/companies/${id}`);
+    fetchData();
   };
 
   return (
     <Box sx={{ display: "flex", minHeight: "100vh" }}>
       <Topbar />
       <Sidebar />
+
       <Box component="main" sx={{ flexGrow: 1, p: 3, mt: 8 }}>
         <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
           <Typography variant="h4">Companies</Typography>
@@ -92,78 +72,64 @@ export default function Companies() {
           </Button>
         </Box>
 
-        {loading ? (
-          <Typography>Loading...</Typography>
-        ) : error ? (
-          <Typography color="error">{error}</Typography>
-        ) : (
-          <Paper sx={{ p: 2 }}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>Email</TableCell>
-                  <TableCell>Rating</TableCell>
-                  <TableCell>Verified</TableCell>
-                  <TableCell>Active</TableCell>
-                  <TableCell>Services</TableCell>
-                  <TableCell>Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {companies.map((c) => (
-                  <TableRow key={c.id}>
-                    <TableCell>{c.email}</TableCell>
-                    <TableCell>{c.rating ?? "-"}</TableCell>
-                    <TableCell>
-                      {c.verified ? (
-                        <Chip label="Yes" color="success" size="small" />
-                      ) : (
-                        <Chip label="No" size="small" />
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      {c.active ? (
-                        <Chip label="Active" color="primary" size="small" />
-                      ) : (
-                        <Chip label="Suspended" size="small" />
-                      )}
-                    </TableCell>
-                    <TableCell>{c.servicesCount || 0}</TableCell>
-                    <TableCell>
-                      <IconButton
-                        size="small"
-                        onClick={() => setEdit({ open: true, initial: c })}
-                      >
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton
-                        size="small"
-                        onClick={() => setConfirm({ open: true, id: c.id })}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        <Paper sx={{ p: 2 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Email</TableCell>
+                <TableCell>Rating</TableCell>
+                <TableCell>Verified</TableCell>
+                <TableCell>Status</TableCell>
+                <TableCell>Services</TableCell>
+                <TableCell>Actions</TableCell>
+              </TableRow>
+            </TableHead>
 
-            <EditCompanyDialog
-              open={edit.open}
-              initial={edit.initial}
-              availableServices={services}
-              onClose={() => setEdit({ open: false, initial: null })}
-              onSave={handleSave}
-            />
-            <ConfirmDialog
-              open={confirm.open}
-              title="Delete Company"
-              description="Are you sure you want to delete this company?"
-              onClose={(v) => setConfirm((s) => ({ ...s, open: v }))}
-              onConfirm={() => handleDelete(confirm.id)}
-            />
-          </Paper>
-        )}
+            <TableBody>
+              {companies.map((c) => (
+                <TableRow key={c.id}>
+                  <TableCell>{c.email}</TableCell>
+                  <TableCell>{c.rating}</TableCell>
+                  <TableCell>
+                    <Chip label={c.verified ? "Yes" : "No"} size="small" />
+                  </TableCell>
+                  <TableCell>
+                    <Chip
+                      label={c.active ? "Active" : "Suspended"}
+                      size="small"
+                      color={c.active ? "success" : "default"}
+                    />
+                  </TableCell>
+                  <TableCell>{c.servicesCount}</TableCell>
+                  <TableCell>
+                    <IconButton onClick={() => setEdit({ open: true, initial: c })}>
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton onClick={() => setConfirm({ open: true, id: c.id })}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </Paper>
+
+        <EditCompanyDialog
+          open={edit.open}
+          initial={edit.initial}
+          services={services}
+          onClose={() => setEdit({ open: false, initial: null })}
+          onSave={handleSave}
+        />
+
+        <ConfirmDialog
+          open={confirm.open}
+          title="Delete Company"
+          description="Are you sure?"
+          onClose={(v) => setConfirm((s) => ({ ...s, open: v }))}
+          onConfirm={() => handleDelete(confirm.id)}
+        />
       </Box>
     </Box>
   );

@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Paper,
-  Typography,
-  TextField,
-  Button,
-  Stack,
-} from "@mui/material";
+import { Box, Paper, Typography, TextField, Button, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
@@ -20,14 +13,12 @@ export default function Login() {
     const emailLower = email.toLowerCase();
     const validDomains = ["@gmail.com", "@hotmail.com"];
     const isDomainValid = validDomains.some((d) => emailLower.endsWith(d));
-    if (!isDomainValid && email.length > 0)
-      return "Email must be @gmail.com or @hotmail.com.";
+    if (!isDomainValid && email.length > 0) return "Email must be @gmail.com or @hotmail.com.";
     return "";
   };
 
   const validatePassword = (password) => {
-    if (password.length > 0 && password.length < 8)
-      return "Password must be at least 8 characters long.";
+    if (password.length > 0 && password.length < 8) return "Password must be at least 8 characters long.";
     return "";
   };
 
@@ -43,23 +34,15 @@ export default function Login() {
 
     try {
       // Send login request to backend on port 3000
-      console.log('before', form);
-      const res = await axios.post(
-        "http://192.168.1.212:3000/api/auth/signin",
-        form,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      console.log(res);
+      const res = await axios.post("http://localhost:3000/api/login", form, {
+        headers: { "Content-Type": "application/json" }
+      });
 
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
       console.error(err);
-      setLoginError(
-        err.response?.data?.message || "Login failed. Please try again."
-      );
+      setLoginError(err.response?.data?.message || "Login failed. Please try again.");
     }
   };
 
